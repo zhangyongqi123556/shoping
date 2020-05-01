@@ -54,9 +54,9 @@ class Cart extends Component {
             </div>
           </div>
         </div>
-        <div class="cart-total">
-          <strong class="cart-total-title">总价</strong>
-          <span class="cart-total-price">￥39.97</span>
+        <div className="cart-total">
+          <strong className="cart-total-title">总价</strong>
+          <span className="cart-total-price">￥39.97</span>
         </div>
       </section>
     );
