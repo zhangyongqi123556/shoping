@@ -9,6 +9,13 @@ class Cart extends Component {
     // 向服务器端发送请求 获取购物车列表数据
     loadCarts();
   }
+  changeProductNumber (cid, event) {
+    const { changeServiceProductNumber } = this.props;
+    // 获取商品的最新数量
+    const count = event.target.value;
+    // 向服务器端发送请求 告诉服务器端我们要将哪一个商品的数量更改成什么
+    changeServiceProductNumber({cid, count});
+  }
   render() {
     const { carts, deleteProductFromCart } = this.props;
     return (
@@ -21,11 +28,11 @@ class Cart extends Component {
         </div>
         <div className="cart-items">
           {carts.map((product) => (
-            <div className="cart-row">
+            <div className="cart-row" key={product.id}>
               <div className="cart-item cart-column">
                 <img
                   className="cart-item-image"
-                  src={product.thumbnail}
+                  src={`http://localhost:3005${product.thumbnail}`}
                   width="100"
                   height="100"
                   alt=""
@@ -36,7 +43,7 @@ class Cart extends Component {
               </div>
               <span className="cart-price cart-column">￥{product.price}</span>
               <div className="cart-quantity cart-column">
-                <input className="cart-quantity-input" type="number" value={product.count} onChange={() => {}}/>
+                <input className="cart-quantity-input" type="number" value={product.count} onChange={e => this.changeProductNumber(product.id, e)}/>
                 <button onClick={() => deleteProductFromCart(product.id)} className="btn btn-danger" type="button">
                   删除
                 </button>
@@ -46,7 +53,11 @@ class Cart extends Component {
         </div>
         <div className="cart-total">
           <strong className="cart-total-title">总价</strong>
-          <span className="cart-total-price">￥39.97</span>
+          <span className="cart-total-price">￥{
+            carts.reduce((total, product) => {
+              return total += product.count * product.price
+            },0)
+          }</span>
         </div>
       </section>
     );
